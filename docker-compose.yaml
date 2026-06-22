@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: binhloi_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: binhloi
+      POSTGRES_USER: binhloi_user
+      POSTGRES_PASSWORD: binhloi_secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U binhloi_user -d binhloi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: binhloi_qdrant
+    restart: unless-stopped
+    volumes:
+      - qdrant_data:/qdrant/storage
+      - ./backend/Qdrant_config.YAML:/qdrant/config/production.yaml
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: dockerfile
+    container_name: binhloi_backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      POSTGRES_URL: postgresql+asyncpg://binhloi_user:binhloi_secret@postgres:5432/binhloi
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: "6333"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      qdrant:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: binhloi_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: binhloi_tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://frontend:80
+    depends_on:
+      - frontend
+
+volumes:
+  postgres_data:
+  qdrant_data:
+  uploads_data:

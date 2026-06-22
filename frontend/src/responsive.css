@@ -1,0 +1,285 @@
+/* ═══════════════════════════════════════════════
+   BÌNH LỢI — GLOBAL RESPONSIVE STYLESHEET
+   Breakpoints: mobile <640px | tablet <960px
+   ═══════════════════════════════════════════════ */
+
+/* ── Reset chung ── */
+*, *::before, *::after { box-sizing: border-box; }
+img { max-width: 100%; height: auto; }
+
+/* ══ GRID UTILITIES ══════════════════════════════ */
+
+/* 5 cols → 3 → 2 → 1 */
+.bl-grid-5 {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+}
+@media (max-width: 960px) {
+  .bl-grid-5 { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  .bl-grid-5 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* 3 cols → 2 → 1 */
+.bl-grid-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+@media (max-width: 960px) {
+  .bl-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 600px) {
+  .bl-grid-3 { grid-template-columns: 1fr !important; }
+}
+
+/* 2 cols → 1 */
+.bl-grid-2 {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 640px) {
+  .bl-grid-2 { grid-template-columns: 1fr !important; }
+}
+
+/* Bento: 1.5fr 1fr 1fr → all 1fr */
+.bl-grid-bento {
+  display: grid !important;
+  grid-template-columns: 1.5fr 1fr 1fr !important;
+}
+@media (max-width: 900px) {
+  .bl-grid-bento { grid-template-columns: 1fr 1fr !important; }
+  .bl-grid-bento > *[style*="span 2"],
+  .bl-grid-bento > *[style*="gridRow: \"span 2\""] {
+    grid-row: span 1 !important;
+  }
+}
+@media (max-width: 600px) {
+  .bl-grid-bento { grid-template-columns: 1fr !important; }
+}
+
+/* Content + Sidebar layout → stack */
+.bl-sidebar-layout {
+  display: grid !important;
+}
+@media (max-width: 900px) {
+  .bl-sidebar-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+
+/* ══ CONTAINER ═══════════════════════════════════ */
+.bl-container {
+  padding-left: 2rem !important;
+  padding-right: 2rem !important;
+}
+@media (max-width: 768px) {
+  .bl-container {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .bl-container {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+/* ══ SECTION PADDING ═════════════════════════════ */
+.bl-section {
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
+}
+@media (max-width: 768px) {
+  .bl-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .bl-section {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+}
+
+/* ══ NAV (pages other than home) ════════════════ */
+.bl-page-nav {
+  padding: 0 2rem !important;
+}
+@media (max-width: 768px) {
+  .bl-page-nav { padding: 0 1rem !important; }
+  .bl-page-nav .bl-nav-title { font-size: 0.85rem !important; }
+}
+
+/* ══ HERO BANNER (sub-pages) ════════════════════ */
+.bl-hero-banner {
+  height: 440px !important;
+}
+@media (max-width: 768px) {
+  .bl-hero-banner {
+    height: 280px !important;
+  }
+  .bl-hero-banner h1 {
+    font-size: 1.6rem !important;
+  }
+  .bl-hero-banner p {
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ══ CARD GRIDS (auto-fill) ══════════════════════ */
+.bl-card-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+}
+@media (max-width: 480px) {
+  .bl-card-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ══ TABLE OVERFLOW ══════════════════════════════ */
+.bl-table-wrap {
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+.bl-table-wrap table {
+  min-width: 600px !important;
+}
+
+/* ══ STATS ROW ═══════════════════════════════════ */
+.bl-stats-row {
+  display: flex !important;
+  gap: 0 !important;
+}
+@media (max-width: 640px) {
+  .bl-stats-row {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+  }
+  .bl-stats-row > div {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.15) !important;
+    padding: 0.75rem 1.5rem !important;
+  }
+}
+
+/* ══ PHOTO STRIP ═════════════════════════════════ */
+.bl-photo-strip {
+  display: flex !important;
+  height: 280px !important;
+}
+@media (max-width: 768px) {
+  .bl-photo-strip { height: 180px !important; }
+  .bl-photo-strip > div:nth-child(n+4) { display: none !important; }
+}
+@media (max-width: 480px) {
+  .bl-photo-strip > div:nth-child(n+3) { display: none !important; }
+  .bl-photo-strip { height: 160px !important; }
+}
+
+/* ══ PROFILE PAGE ════════════════════════════════ */
+@media (max-width: 640px) {
+  .p-card { border-radius: 16px !important; }
+}
+
+/* ══ BOOKING PAGE ════════════════════════════════ */
+.bl-booking-steps {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 0.75rem !important;
+}
+@media (max-width: 900px) {
+  .bl-booking-steps { grid-template-columns: repeat(3, 1fr) !important; }
+}
+@media (max-width: 640px) {
+  .bl-booking-steps { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ══ SUPER ADMIN TABLE ═══════════════════════════ */
+@media (max-width: 900px) {
+  .admin-row td:nth-child(n+5) { display: none !important; }
+}
+@media (max-width: 640px) {
+  .admin-row td:nth-child(n+4) { display: none !important; }
+}
+
+/* ══ MODAL RESPONSIVE ════════════════════════════ */
+@media (max-width: 640px) {
+  /* Ensure modals don't overflow horizontally */
+  [style*="maxWidth: 480"],
+  [style*="max-width: 480px"] {
+    max-width: calc(100vw - 2rem) !important;
+  }
+}
+
+/* ══ WORKSHOP SIDEBAR PANEL ══════════════════════ */
+@media (max-width: 900px) {
+  .ws-sidebar { order: -1 !important; }
+}
+
+/* ══ CHAT PANEL ══════════════════════════════════ */
+@media (max-width: 640px) {
+  [style*="width: 380"] {
+    width: calc(100vw - 2rem) !important;
+    right: 1rem !important;
+    left: 1rem !important;
+  }
+}
+
+/* ══ LANG MAI / LANG NHANG — section hero ════════ */
+.bl-full-section {
+  padding: 5rem 3rem !important;
+}
+@media (max-width: 900px) {
+  .bl-full-section { padding: 3.5rem 1.5rem !important; }
+}
+@media (max-width: 640px) {
+  .bl-full-section { padding: 2.5rem 1rem !important; }
+}
+
+/* ══ COMPANION (floating) ════════════════════════ */
+@media (max-width: 480px) {
+  [style*="bottom: 80px"][style*="right: 20px"] {
+    right: 8px !important;
+    bottom: 70px !important;
+  }
+}
+
+/* ══ HORIZONTAL SCROLL FOR CHIP ROWS ════════════ */
+.bl-chip-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+}
+@media (max-width: 480px) {
+  .bl-chip-row { gap: 0.35rem !important; }
+  .bl-chip-row > * { font-size: 0.72rem !important; }
+}
+
+/* ══ EXPLORE PAGE ════════════════════════════════ */
+.bl-explore-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 640px) {
+  .bl-explore-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ══ MAPPAGE — hide panel overlay on small screens ══ */
+@media (max-width: 640px) {
+  .map-side-panel {
+    width: 100% !important;
+    max-height: 45vh !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    z-index: 50 !important;
+  }
+}

@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bình Lợi – Healing Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --moss: #3D5A3E;
+    --gold: #C8963E;
+    --cream: #F5F0E8;
+    --earth: #8B5E3C;
+    --sage: #7A9E7E;
+    --dark: #1C2B1D;
+    --warm-white: #FEFCF8;
+    --rust: #9B3A1A;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: var(--warm-white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    background: rgba(254,252,248,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(200,150,62,0.15);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--moss);
+    line-height: 1.1;
+  }
+
+  .logo-sub {
+    font-size: 0.6rem;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--dark);
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--moss); }
+
+  .nav-cta {
+    background: var(--moss);
+    color: white !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.8rem !important;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem 3rem 4rem 5rem;
+    background: var(--dark);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(61,90,62,0.4) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.7);
+    max-width: 400px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 0.85rem 1.75rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(200,150,62,0.3);
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid rgba(245,240,232,0.3);
+    color: var(--cream);
+    padding: 0.85rem 1.75rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--gold);
+    background: rgba(200,150,62,0.1);
+  }
+
+  .hero-right {
+    position: relative;
+    background: linear-gradient(160deg, #3D5A3E 0%, #2A3F2B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  /* Info card floating */
+  .info-card {
+    position: absolute;
+    bottom: 3rem;
+    left: 2rem;
+    right: 2rem;
+    background: rgba(254,252,248,0.96);
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .info-card-title {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1rem;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .info-item label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 3px;
+  }
+
+  .info-item span {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .info-item span.highlight { color: var(--rust); }
+
+  /* ─── SECTION: KHÁM PHÁ ─── */
+  .section {
+    padding: 6rem 5rem;
+  }
+
+  .section-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #666;
+    max-width: 500px;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── FEATURES BENTO ─── */
+  .bento {
+    background: var(--cream);
+  }
+
+  .bento-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+
+  .bento-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.04);
+    transition: transform 0.2s;
+  }
+
+  .bento-card:hover { transform: translateY(-3px); }
+
+  .bento-card.tall {
+    grid-row: span 2;
+    background: var(--dark);
+    color: var(--cream);
+  }
+
+  .bento-card.green {
+    background: var(--moss);
+    color: var(--cream);
+  }
+
+  .bento-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.25rem;
+  }
+
+  .bento-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .bento-card-desc {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    opacity: 0.7;
+  }
+
+  .bento-tag {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--dark);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .bento-big-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  /* ─── WORKSHOP ─── */
+  .workshop-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 0;
+  }
+
+  .workshop-card {
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .workshop-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  }
+
+  .workshop-img {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+  }
+
+  .workshop-body {
+    padding: 1.25rem;
+  }
+
+  .workshop-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 0.5rem;
+  }
+
+  .workshop-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+  }
+
+  .workshop-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.78rem;
+    color: #888;
+    margin-bottom: 1rem;
+  }
+
+  .workshop-btn {
+    display: inline-block;
+    padding: 0.5rem 1.25rem;
+    border: 1.5px solid var(--moss);
+    border-radius: 2rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--moss);
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .workshop-btn:hover {
+    background: var(--moss);
+    color: white;
+  }
+
+  /* ─── HÀNH TRÌNH ─── */
+  .journey {
+    background: var(--dark);
+    color: var(--cream);
+  }
+
+  .journey .section-title { color: var(--cream); }
+  .journey .section-desc { color: rgba(245,240,232,0.6); }
+
+  .journey-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .journey-steps::before {
+    content: '';
+    position: absolute;
+    top: 28px;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .journey-step {
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+
+  .step-dot {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--moss);
+    border: 2px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gold);
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: var(--cream);
+  }
+
+  .step-desc {
+    font-size: 0.78rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.55);
+  }
+
+  /* ─── TESTIMONIAL ─── */
+  .testimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .testimonial-card {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+  }
+
+  .testimonial-card::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: var(--gold);
+    opacity: 0.3;
+    position: absolute;
+    top: 0.5rem;
+    left: 1.5rem;
+    line-height: 1;
+  }
+
+  .testimonial-text {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--dark);
+    margin-bottom: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .author-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .author-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  .author-loc {
+    font-size: 0.72rem;
+    color: #888;
+  }
+
+  /* ─── CTA ─── */
+  .cta-section {
+    background: var(--moss);
+    padding: 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -150px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(circle, rgba(200,150,62,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: var(--cream);
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cta-desc {
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--dark);
+    padding: 3rem 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.4);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ─── COMPANION CHARACTER ─── */
+  .companion {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    pointer-events: none;
+  }
+
+  .companion-bubble {
+    background: white;
+    border: 1.5px solid rgba(61,90,62,0.2);
+    border-radius: 14px 14px 4px 14px;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    color: var(--dark);
+    line-height: 1.5;
+    max-width: 220px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    animation: bubblePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    pointer-events: auto;
+  }
+
+  .companion-bubble strong {
+    color: var(--moss);
+    font-weight: 600;
+  }
+
+  @keyframes bubblePop {
+    from { opacity: 0; transform: scale(0.8) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .companion-char {
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.2s;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+    animation: floatChar 3s ease-in-out infinite;
+  }
+
+  .companion-char:hover { transform: scale(1.1); }
+
+  @keyframes floatChar {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+
+  /* ─── HERO SVG ILLUSTRATION ─── */
+  .hero-illustration {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0; left: 0;
+  }
+
+  /* Decorative dots */
+  .dots-pattern {
+    position: absolute;
+    opacity: 0.06;
+    top: 20px; right: 20px;
+    width: 200px; height: 200px;
+    background-image: radial-gradient(circle, var(--cream) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="logo">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="18" fill="#3D5A3E"/>
+      <path d="M18 8 C14 12 10 14 10 20 C10 25 13.5 29 18 29 C22.5 29 26 25 26 20 C26 14 22 12 18 8Z" fill="#7A9E7E"/>
+      <path d="M18 13 C16 16 14 18 14 21.5 C14 24 15.8 26 18 26 C20.2 26 22 24 22 21.5 C22 18 20 16 18 13Z" fill="#F5F0E8"/>
+      <circle cx="18" cy="21" r="2.5" fill="#C8963E"/>
+    </svg>
+    <div class="logo-text">
+      BÌNH LỢI
+      <span class="logo-sub">Healing Journey</span>
+    </div>
+  </div>
+
+  <ul class="nav-links">
+    <li><a href="#">Trang chủ</a></li>
+    <li><a href="#kham-pha">Khám phá</a></li>
+    <li><a href="#workshop">Workshop</a></li>
+    <li><a href="#hanh-trinh">Hành trình</a></li>
+    <li><a href="#lien-he" class="nav-cta">Đặt lịch</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="dots-pattern"></div>
+    <p class="hero-eyebrow">✦ Khám phá miền Tây giữa lòng Sài Gòn</p>
+    <h1 class="hero-title">
+      Bình Lợi —<br>
+      Giữ <em>hồn quê</em><br>
+      giữa nhịp sống mới
+    </h1>
+    <p class="hero-desc">
+      Vùng đất yên bình với làng mai, làng nhang và những không gian văn hóa truyền thống. Một trải nghiệm gần gũi, đậm chất địa phương chỉ cách trung tâm 20km.
+    </p>
+    <div class="hero-btns">
+      <a href="#kham-pha" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Khám phá ngay
+      </a>
+      <a href="#hanh-trinh" class="btn-outline">
+        Xem bản đồ →
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Nature SVG illustration -->
+    <svg viewBox="0 0 560 640" class="hero-illustration" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sky -->
+      <rect width="560" height="640" fill="#2A3F2B"/>
+      <!-- Moon glow -->
+      <circle cx="420" cy="100" r="70" fill="#3D5A3E" opacity="0.6"/>
+      <circle cx="420" cy="100" r="45" fill="#4A6B4C" opacity="0.8"/>
+      <circle cx="420" cy="100" r="28" fill="#C8963E" opacity="0.25"/>
+      <!-- Stars -->
+      <circle cx="80" cy="60" r="1.5" fill="#F5F0E8" opacity="0.6"/>
+      <circle cx="200" cy="40" r="1" fill="#F5F0E8" opacity="0.5"/>
+      <circle cx="320" cy="80" r="1.5" fill="#F5F0E8" opacity="0.7"/>
+      <circle cx="50" cy="130" r="1" fill="#F5F0E8" opacity="0.4"/>
+      <circle cx="480" cy="50" r="1" fill="#F5F0E8" opacity="0.5"/>
+      <circle cx="150" cy="100" r="1.5" fill="#F5F0E8" opacity="0.3"/>
+      <!-- Water reflection -->
+      <rect x="0" y="460" width="560" height="180" fill="#1A2E1B" opacity="0.8"/>
+      <ellipse cx="280" cy="460" rx="280" ry="20" fill="#243525"/>
+      <!-- Water ripples -->
+      <ellipse cx="280" cy="490" rx="120" ry="6" fill="none" stroke="#3D5A3E" stroke-width="1" opacity="0.4"/>
+      <ellipse cx="280" cy="510" rx="80" ry="4" fill="none" stroke="#3D5A3E" stroke-width="1" opacity="0.3"/>
+      <ellipse cx="280" cy="525" rx="50" ry="3" fill="none" stroke="#C8963E" stroke-width="0.8" opacity="0.3"/>
+      <!-- Koi fish -->
+      <ellipse cx="200" cy="500" rx="28" ry="10" fill="#C8963E" opacity="0.7" transform="rotate(-15 200 500)"/>
+      <ellipse cx="360" cy="520" rx="22" ry="8" fill="#F5F0E8" opacity="0.6" transform="rotate(10 360 520)"/>
+      <!-- Trees left -->
+      <rect x="30" y="300" width="12" height="160" fill="#1C2B1D"/>
+      <ellipse cx="36" cy="280" rx="45" ry="70" fill="#3D5A3E"/>
+      <ellipse cx="36" cy="260" rx="32" ry="50" fill="#4A6B4C"/>
+      <!-- Trees right -->
+      <rect x="500" y="320" width="10" height="140" fill="#1C2B1D"/>
+      <ellipse cx="505" cy="300" rx="38" ry="58" fill="#3D5A3E"/>
+      <ellipse cx="505" cy="285" rx="26" ry="42" fill="#4A6B4C"/>
+      <!-- Mai tree center (plum blossom) -->
+      <rect x="255" y="280" width="14" height="180" fill="#5C3D1E"/>
+      <!-- Branches -->
+      <line x1="262" y1="340" x2="200" y2="300" stroke="#5C3D1E" stroke-width="8"/>
+      <line x1="262" y1="360" x2="330" y2="310" stroke="#5C3D1E" stroke-width="7"/>
+      <line x1="262" y1="380" x2="190" y2="350" stroke="#5C3D1E" stroke-width="6"/>
+      <line x1="262" y1="400" x2="340" y2="380" stroke="#5C3D1E" stroke-width="5"/>
+      <!-- Mai flowers -->
+      <g opacity="0.9">
+        <circle cx="195" cy="296" r="5" fill="#F5F0E8"/>
+        <circle cx="205" cy="292" r="4" fill="#FFF8E7"/>
+        <circle cx="190" cy="288" r="3.5" fill="#F5F0E8"/>
+        <circle cx="335" cy="306" r="5" fill="#FFF8E7"/>
+        <circle cx="325" cy="300" r="4" fill="#F5F0E8"/>
+        <circle cx="340" cy="295" r="3.5" fill="#FFF8E7"/>
+        <circle cx="185" cy="346" r="4.5" fill="#F5F0E8"/>
+        <circle cx="195" cy="340" r="4" fill="#FFF8E7"/>
+        <circle cx="345" cy="376" r="4.5" fill="#FFF8E7"/>
+        <circle cx="335" cy="370" r="4" fill="#F5F0E8"/>
+        <!-- Petals detail -->
+        <circle cx="200" cy="292" r="2" fill="#C8963E" opacity="0.6"/>
+        <circle cx="332" cy="302" r="2" fill="#C8963E" opacity="0.6"/>
+        <circle cx="190" cy="343" r="2" fill="#C8963E" opacity="0.6"/>
+        <circle cx="340" cy="374" r="2" fill="#C8963E" opacity="0.6"/>
+      </g>
+      <!-- Temple silhouette -->
+      <rect x="100" y="380" width="80" height="80" fill="#1C2B1D"/>
+      <polygon points="80,380 180,380 140,340 100,340" fill="#243525"/>
+      <polygon points="90,340 170,340 140,310 120,310" fill="#1C2B1D"/>
+      <!-- Temple door -->
+      <rect x="125" y="420" width="30" height="40" fill="#3D5A3E" opacity="0.5"/>
+      <!-- Lanterns -->
+      <rect x="88" y="350" width="4" height="20" fill="#8B5E3C" opacity="0.7"/>
+      <ellipse cx="90" cy="370" rx="8" ry="12" fill="#C8963E" opacity="0.8"/>
+      <rect x="164" y="350" width="4" height="20" fill="#8B5E3C" opacity="0.7"/>
+      <ellipse cx="166" cy="370" rx="8" ry="12" fill="#C8963E" opacity="0.8"/>
+      <!-- Incense smoke -->
+      <path d="M262 280 Q258 260 262 240 Q266 220 262 200" stroke="#F5F0E8" stroke-width="1.5" fill="none" opacity="0.3"/>
+      <path d="M268 285 Q272 265 268 245 Q264 225 268 205" stroke="#F5F0E8" stroke-width="1" fill="none" opacity="0.2"/>
+    </svg>
+
+    <!-- Info card overlaid -->
+    <div class="info-card">
+      <p class="info-card-title">✦ Thông tin nhanh</p>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Vị trí</label>
+          <span>Huyện Bình Chánh, TP.HCM</span>
+        </div>
+        <div class="info-item">
+          <label>Cách trung tâm</label>
+          <span>~20km · 45-60 phút</span>
+        </div>
+        <div class="info-item">
+          <label>Đặc sản</label>
+          <span class="highlight">Mai Vàng · Nhang Thơm · Cá Koi</span>
+        </div>
+        <div class="info-item">
+          <label>Không gian</label>
+          <span>Miệt vườn sinh thái, tâm linh</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BENTO FEATURES ═══ -->
+<section id="kham-pha" class="section bento">
+  <p class="section-label">✦ Điểm nổi bật</p>
+  <h2 class="section-title">Bình Lợi có gì<br>đặc biệt?</h2>
+
+  <div class="bento-grid">
+
+    <!-- Card lớn -->
+    <div class="bento-card tall">
+      <span class="bento-tag">Đặc trưng</span>
+      <div class="bento-big-num">300+</div>
+      <p style="color:rgba(245,240,232,0.5); font-size:0.8rem; margin-bottom: 1.5rem;">năm lịch sử làng nghề</p>
+      <svg class="bento-icon" viewBox="0 0 48 48" fill="none">
+        <path d="M24 6 L24 6 C18 12 12 14 12 22 C12 29 17.5 34 24 34 C30.5 34 36 29 36 22 C36 14 30 12 24 6Z" fill="#7A9E7E" opacity="0.6"/>
+        <path d="M24 12 C20 17 18 20 18 24 C18 27.3 20.7 30 24 30 C27.3 30 30 27.3 30 24 C30 20 28 17 24 12Z" fill="#F5F0E8" opacity="0.9"/>
+        <circle cx="24" cy="24" r="4" fill="#C8963E"/>
+        <path d="M24 38 L22 44 L24 42 L26 44 Z" fill="#C8963E" opacity="0.5"/>
+      </svg>
+      <h3 class="bento-card-title">Làng Mai Vàng</h3>
+      <p class="bento-card-desc">Ngôi làng mai lâu đời nhất Sài Gòn, nơi lưu giữ tinh hoa nghề trồng mai vàng truyền thống qua nhiều thế hệ.</p>
+    </div>
+
+    <!-- Card nhỏ 1 -->
+    <div class="bento-card green">
+      <svg class="bento-icon" viewBox="0 0 48 48" fill="none">
+        <path d="M12 36 L12 20 L24 10 L36 20 L36 36 Z" fill="rgba(255,255,255,0.2)"/>
+        <rect x="18" y="28" width="12" height="8" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="24" cy="18" r="4" fill="#C8963E" opacity="0.8"/>
+        <line x1="16" y1="36" x2="10" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+        <line x1="32" y1="36" x2="38" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+      </svg>
+      <h3 class="bento-card-title">Không gian tâm linh</h3>
+      <p class="bento-card-desc">Những ngôi chùa cổ kính, không gian thiền định thanh tịnh giữa thiên nhiên.</p>
+    </div>
+
+    <!-- Card nhỏ 2 -->
+    <div class="bento-card" style="background: #FFF8EE;">
+      <svg class="bento-icon" viewBox="0 0 48 48" fill="none">
+        <ellipse cx="24" cy="32" rx="16" ry="8" fill="#7A9E7E" opacity="0.3"/>
+        <ellipse cx="18" cy="28" rx="6" ry="3" fill="#C8963E" opacity="0.8" transform="rotate(-10 18 28)"/>
+        <ellipse cx="30" cy="30" rx="5" ry="2.5" fill="#F5F0E8" opacity="0.9" transform="rotate(15 30 30)"/>
+        <path d="M10 38 Q24 30 38 38" stroke="#7A9E7E" stroke-width="1.5" fill="none"/>
+        <circle cx="20" cy="25" r="2" fill="#C8963E" opacity="0.6"/>
+        <circle cx="32" cy="27" r="1.5" fill="#8B5E3C" opacity="0.5"/>
+      </svg>
+      <h3 class="bento-card-title" style="color: var(--dark);">Hồ Cá Koi</h3>
+      <p class="bento-card-desc" style="color:#666;">Những hồ cá koi nhiều màu sắc — trị liệu thị giác và tâm hồn.</p>
+    </div>
+
+    <!-- Card nhỏ 3 -->
+    <div class="bento-card">
+      <svg class="bento-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="14" y="10" width="20" height="28" rx="3" fill="#8B5E3C" opacity="0.3"/>
+        <line x1="14" y1="20" x2="18" y2="20" stroke="#C8963E" stroke-width="1.5"/>
+        <line x1="14" y1="25" x2="18" y2="25" stroke="#C8963E" stroke-width="1.5"/>
+        <line x1="14" y1="30" x2="18" y2="30" stroke="#C8963E" stroke-width="1.5"/>
+        <path d="M28 8 C28 8 30 14 28 18 C26 22 28 28 28 28" stroke="#8B5E3C" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <circle cx="28" cy="30" r="4" fill="#3D5A3E" opacity="0.6"/>
+        <path d="M28 34 L24 40 L28 38 L32 40 Z" fill="#3D5A3E" opacity="0.4"/>
+      </svg>
+      <h3 class="bento-card-title" style="color:var(--dark);">Làng Nhang Thơm</h3>
+      <p class="bento-card-desc" style="color:#666;">Nghề làm nhang thủ công lâu đời, hương thơm thanh khiết của làng Lê Minh Xuân.</p>
+    </div>
+
+    <!-- Card nhỏ 4 -->
+    <div class="bento-card" style="background: var(--dark); grid-column: span 1;">
+      <p style="color: var(--gold); font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem;">Miệt vườn</p>
+      <div style="font-family:'Playfair Display',serif; font-size:2rem; color:var(--cream); font-weight:600; line-height:1; margin-bottom:0.5rem;">4 mùa</div>
+      <p style="font-size:0.78rem; color:rgba(245,240,232,0.55); line-height:1.6;">sinh thái ngập nước, rau sạch, trái cây nhiệt đới quanh năm.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ WORKSHOP ═══ -->
+<section id="workshop" class="section" style="background: var(--warm-white);">
+  <p class="section-label">✦ Hoạt động & Workshop</p>
+  <h2 class="section-title">Trải nghiệm cùng<br>cộng đồng</h2>
+  <p class="section-desc">Những buổi workshop nhỏ, ấm cúng — nơi bạn học nghề thủ công, kết nối thiên nhiên và chữa lành tâm hồn.</p>
+
+  <div class="workshop-grid">
+    <div class="workshop-card">
+      <div class="workshop-img" style="background: linear-gradient(135deg, #FFF8EE, #F5E6CC);">🌸</div>
+      <div class="workshop-body">
+        <p class="workshop-tag">Nghề thủ công</p>
+        <h3 class="workshop-title">Học uốn cành mai – cắm hoa truyền thống</h3>
+        <div class="workshop-meta">
+          <span>🕐 3 tiếng</span>
+          <span>👥 Max 10 người</span>
+        </div>
+        <a href="#" class="workshop-btn">Đăng ký →</a>
+      </div>
+    </div>
+
+    <div class="workshop-card">
+      <div class="workshop-img" style="background: linear-gradient(135deg, #EEF5EE, #C8DCC8);">🧘</div>
+      <div class="workshop-body">
+        <p class="workshop-tag">Tâm lý & Thư giãn</p>
+        <h3 class="workshop-title">Thiền định bên hồ – buổi sáng tĩnh lặng</h3>
+        <div class="workshop-meta">
+          <span>🕐 2 tiếng</span>
+          <span>👥 Max 15 người</span>
+        </div>
+        <a href="#" class="workshop-btn">Đăng ký →</a>
+      </div>
+    </div>
+
+    <div class="workshop-card">
+      <div class="workshop-img" style="background: linear-gradient(135deg, #F5EEEE, #DCC8C8);">🕯️</div>
+      <div class="workshop-body">
+        <p class="workshop-tag">Trải nghiệm làng nghề</p>
+        <h3 class="workshop-title">Làm nhang thơm thủ công cùng nghệ nhân</h3>
+        <div class="workshop-meta">
+          <span>🕐 4 tiếng</span>
+          <span>👥 Max 8 người</span>
+        </div>
+        <a href="#" class="workshop-btn">Đăng ký →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HÀNH TRÌNH ═══ -->
+<section id="hanh-trinh" class="section journey">
+  <p class="section-label" style="color:var(--gold);">✦ Hành trình</p>
+  <h2 class="section-title">Một ngày ở Bình Lợi</h2>
+  <p class="section-desc">Lịch trình gợi ý để bạn trải nghiệm trọn vẹn vùng đất yên bình này.</p>
+
+  <div class="journey-steps" style="margin-top: 3rem;">
+    <div class="journey-step">
+      <div class="step-dot">6h</div>
+      <h4 class="step-title">Bình minh tĩnh lặng</h4>
+      <p class="step-desc">Thiền định bên hồ sen, đón bình minh giữa không gian miệt vườn xanh mướt.</p>
+    </div>
+    <div class="journey-step">
+      <div class="step-dot">9h</div>
+      <h4 class="step-title">Khám phá làng nghề</h4>
+      <p class="step-desc">Thăm làng mai vàng, gặp gỡ nghệ nhân làm nhang, tìm hiểu văn hóa địa phương.</p>
+    </div>
+    <div class="journey-step">
+      <div class="step-dot">14h</div>
+      <h4 class="step-title">Workshop & Trải nghiệm</h4>
+      <p class="step-desc">Tham gia workshop theo sở thích — làm nhang, uốn mai, hay ngồi thiền bên hồ cá koi.</p>
+    </div>
+    <div class="journey-step">
+      <div class="step-dot">17h</div>
+      <h4 class="step-title">Hoàng hôn & Về lại</h4>
+      <p class="step-desc">Thưởng thức bữa chiều dân dã, mang theo ký ức và hương thơm của đất quê.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TESTIMONIALS ═══ -->
+<section class="section" style="background: var(--warm-white);">
+  <p class="section-label">✦ Cộng đồng nói gì</p>
+  <h2 class="section-title">Những khoảnh khắc<br>được chữa lành</h2>
+
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p class="testimonial-text">
+        Tôi đã đến Bình Lợi vào một buổi sáng mệt mỏi sau chuỗi ngày bận rộn. Ngồi bên hồ koi, nghe tiếng nước chảy và nhìn những bông mai nở — tôi cảm thấy mình thở được lại.
+      </p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background: #EEF5EE;">🌿</div>
+        <div>
+          <p class="author-name">Minh Trang</p>
+          <p class="author-loc">Quận 1, TP.HCM</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="testimonial-card">
+      <p class="testimonial-text">
+        Workshop làm nhang thủ công là trải nghiệm tuyệt vời nhất mình từng tham gia. Không khí làng quê, nghệ nhân chia sẻ tận tình — mình mang hết cả tâm hồn về nhà.
+      </p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background: #FFF8EE;">🕯️</div>
+        <div>
+          <p class="author-name">Đức Hùng</p>
+          <p class="author-loc">Bình Thạnh, TP.HCM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section id="lien-he" class="cta-section">
+  <h2 class="cta-title">Sẵn sàng chữa lành?</h2>
+  <p class="cta-desc">Đặt lịch tham quan hoặc đăng ký workshop — chúng tôi sẽ đồng hành cùng bạn trên hành trình tìm lại bình yên.</p>
+  <a href="#" class="btn-primary" style="display:inline-flex; margin: 0 auto;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    Đặt lịch ngay
+  </a>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <p class="footer-copy">© 2025 Bình Lợi Healing Journey. Huyện Bình Chánh, TP.HCM</p>
+  <ul class="footer-links">
+    <li><a href="#">Trang chủ</a></li>
+    <li><a href="#">Workshop</a></li>
+    <li><a href="#">Liên hệ</a></li>
+    <li><a href="#">Bản đồ</a></li>
+  </ul>
+</footer>
+
+<!-- ═══ COMPANION CHARACTER ═══ -->
+<div class="companion" id="companion">
+  <div class="companion-bubble" id="bubble">
+    <strong>Chào bạn! 🌸</strong><br>
+    Mình là Lợi — sẽ đồng hành cùng bạn khám phá Bình Lợi nhé!
+  </div>
+
+  <!-- SVG nhân vật cô gái Việt Nam illustration -->
+  <svg class="companion-char" id="companion-char" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg" onclick="toggleBubble()">
+    <!-- Non lá (nón lá) -->
+    <ellipse cx="50" cy="28" rx="38" ry="8" fill="#C8963E" opacity="0.9"/>
+    <path d="M12 28 Q50 5 88 28" fill="#E8B55A" stroke="#C8963E" stroke-width="1"/>
+    <line x1="50" y1="28" x2="50" y2="8" stroke="#8B5E3C" stroke-width="1" opacity="0.5"/>
+    <line x1="50" y1="28" x2="20" y2="22" stroke="#8B5E3C" stroke-width="0.5" opacity="0.4"/>
+    <line x1="50" y1="28" x2="80" y2="22" stroke="#8B5E3C" stroke-width="0.5" opacity="0.4"/>
+    <!-- Dây nón -->
+    <path d="M35 36 Q30 45 34 50" stroke="#8B5E3C" stroke-width="1" fill="none" opacity="0.6"/>
+    <!-- Đầu -->
+    <ellipse cx="50" cy="48" rx="18" ry="20" fill="#F5C99A"/>
+    <!-- Tóc -->
+    <path d="M32 42 Q34 28 50 30 Q66 28 68 42" fill="#3D2B1F"/>
+    <path d="M32 42 Q30 50 32 58" stroke="#3D2B1F" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M68 42 Q70 50 68 58" stroke="#3D2B1F" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <!-- Mắt -->
+    <ellipse cx="43" cy="50" rx="3" ry="3.5" fill="white"/>
+    <ellipse cx="57" cy="50" rx="3" ry="3.5" fill="white"/>
+    <ellipse cx="43.5" cy="51" rx="2" ry="2.2" fill="#3D2B1F"/>
+    <ellipse cx="57.5" cy="51" rx="2" ry="2.2" fill="#3D2B1F"/>
+    <circle cx="44" cy="50.5" r="0.8" fill="white"/>
+    <circle cx="58" cy="50.5" r="0.8" fill="white"/>
+    <!-- Lông mày -->
+    <path d="M40 46 Q43 44.5 46 46" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M54 46 Q57 44.5 60 46" stroke="#3D2B1F" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <!-- Mũi -->
+    <ellipse cx="50" cy="56" rx="2" ry="1.5" fill="#E8A882" opacity="0.5"/>
+    <!-- Miệng cười -->
+    <path d="M44 61 Q50 66 56 61" stroke="#C8727E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Má hồng -->
+    <ellipse cx="38" cy="58" rx="5" ry="3" fill="#F0A0A8" opacity="0.3"/>
+    <ellipse cx="62" cy="58" rx="5" ry="3" fill="#F0A0A8" opacity="0.3"/>
+    <!-- Áo dài (thân) -->
+    <path d="M32 68 L30 130 L70 130 L68 68 Q60 64 50 64 Q40 64 32 68Z" fill="#3D5A3E"/>
+    <!-- Cổ áo dài -->
+    <path d="M44 68 L50 80 L56 68" fill="#F5C99A"/>
+    <path d="M44 68 L42 90" stroke="#2A3F2B" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M56 68 L58 90" stroke="#2A3F2B" stroke-width="1" fill="none" opacity="0.5"/>
+    <!-- Tay trái (cầm bông mai) -->
+    <path d="M32 70 Q22 80 20 95" stroke="#3D5A3E" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <ellipse cx="20" cy="95" rx="6" ry="5" fill="#F5C99A"/>
+    <!-- Cành mai cầm tay -->
+    <path d="M20 90 Q18 78 22 65 Q26 55 24 45" stroke="#5C3D1E" stroke-width="2" fill="none"/>
+    <circle cx="22" cy="65" r="4" fill="#F5F0E8"/>
+    <circle cx="25" cy="58" r="3" fill="#FFF8E7"/>
+    <circle cx="20" cy="72" r="3.5" fill="#F5F0E8"/>
+    <circle cx="23" cy="66" r="1.5" fill="#C8963E"/>
+    <circle cx="26" cy="59" r="1.2" fill="#C8963E"/>
+    <!-- Tay phải -->
+    <path d="M68 70 Q78 80 80 95" stroke="#3D5A3E" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <ellipse cx="80" cy="95" rx="6" ry="5" fill="#F5C99A"/>
+    <!-- Hoa văn áo dài -->
+    <circle cx="50" cy="95" r="2" fill="#7A9E7E" opacity="0.4"/>
+    <circle cx="50" cy="108" r="2" fill="#7A9E7E" opacity="0.4"/>
+    <circle cx="44" cy="101" r="1.5" fill="#C8963E" opacity="0.3"/>
+    <circle cx="56" cy="101" r="1.5" fill="#C8963E" opacity="0.3"/>
+    <!-- Váy (quần áo dài) -->
+    <path d="M38 110 L35 130 L45 130 L50 118 L55 130 L65 130 L62 110Z" fill="#2A3F2B" opacity="0.8"/>
+  </svg>
+</div>
+
+<script>
+  const messages = [
+    { text: "<strong>Chào bạn! 🌸</strong><br>Mình là Lợi — sẽ đồng hành cùng bạn khám phá Bình Lợi nhé!" },
+    { text: "🌿 <strong>Làng mai</strong> nở đẹp nhất vào tháng Chạp — bạn đã lên kế hoạch chưa?" },
+    { text: "🕯️ Workshop <strong>làm nhang thủ công</strong> cuối tuần này còn 3 suất — đăng ký sớm nhé!" },
+    { text: "🐠 Hồ <strong>cá Koi</strong> buổi chiều rất yên tĩnh, mình hay ngồi thiền ở đó lắm!" },
+    { text: "✨ Cần gợi ý lịch trình? Cuộn xuống phần <strong>Hành Trình</strong> nha!" },
+    { text: "🌄 Khởi hành lúc <strong>5h30 sáng</strong> để kịp đón bình minh bên hồ sen đó bạn!" }
+  ];
+
+  let msgIndex = 0;
+  let visible = true;
+
+  function toggleBubble() {
+    const bubble = document.getElementById('bubble');
+    if (visible) {
+      bubble.style.display = 'none';
+      visible = false;
+    } else {
+      msgIndex = (msgIndex + 1) % messages.length;
+      bubble.innerHTML = messages[msgIndex].text;
+      bubble.style.display = 'block';
+      bubble.style.animation = 'none';
+      setTimeout(() => { bubble.style.animation = 'bubblePop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards'; }, 10);
+      visible = true;
+    }
+  }
+
+  // Tự đổi message theo scroll
+  let lastScrollSection = '';
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    const bubble = document.getElementById('bubble');
+    let newSection = '';
+
+    if (y < 400) newSection = 'hero';
+    else if (y < 900) newSection = 'bento';
+    else if (y < 1400) newSection = 'workshop';
+    else if (y < 1900) newSection = 'journey';
+    else newSection = 'footer';
+
+    if (newSection !== lastScrollSection) {
+      lastScrollSection = newSection;
+      const sectionMsgs = {
+        hero: messages[0],
+        bento: messages[3],
+        workshop: messages[2],
+        journey: messages[5],
+        footer: messages[1]
+      };
+      if (visible && sectionMsgs[newSection]) {
+        bubble.innerHTML = sectionMsgs[newSection].text;
+        bubble.style.animation = 'none';
+        setTimeout(() => { bubble.style.animation = 'bubblePop 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards'; }, 10);
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
