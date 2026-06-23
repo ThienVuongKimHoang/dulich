@@ -24,6 +24,17 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  backend:
+    build: .
+    container_name: binhloi_backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - qdrant
+
 volumes:
   postgres_data:
   qdrant_data:
