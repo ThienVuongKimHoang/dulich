@@ -35,6 +35,18 @@ services:
       - postgres
       - qdrant
 
+  frontend:
+    build:
+      context: ../frontend
+      args:
+        VITE_API_URL: https://binhloi.duckdns.org
+    container_name: binhloi_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
   qdrant_data:
