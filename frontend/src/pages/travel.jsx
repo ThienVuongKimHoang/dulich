@@ -116,6 +116,21 @@ export default function BinhLoiLanding() {
     return () => clearTimeout(timer);
   }, [user, handleLogout]);
 
+  // Handle Google OAuth callback — reads ?google_token=<jwt> from URL after redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const googleToken = params.get("google_token");
+    if (!googleToken) return;
+    localStorage.setItem("access_token", googleToken);
+    window.history.replaceState({}, "", window.location.pathname);
+    fetch(`${API_BASE}/api/v1/users/me`, {
+      headers: { Authorization: `Bearer ${googleToken}` },
+    })
+      .then(r => r.ok ? r.json() : null)
+      .then(me => { if (me) handleLoginSuccess(me); })
+      .catch(() => {});
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   // Track page visit on first load
   useEffect(() => {
     fetch(`${API_BASE}/api/v1/admin/track-visit`, {

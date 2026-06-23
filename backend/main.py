@@ -1,14 +1,16 @@
 import os
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.database import AsyncSessionLocal, create_tables
+from core.database import AsyncSessionLocal, create_tables, get_db
 from core.models import User
-from app.routers.auth import router as auth_router
+from app.routers.auth import _handle_google_callback, router as auth_router
 from app.routers.users import router as users_router
 from app.routers.minigame import router as minigame_router
 from app.routers.profile import router as profile_router
@@ -62,7 +64,11 @@ _extra_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"] + _extra_origins,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://binhloi.duckdns.org",
+    ] + _extra_origins,
     allow_origin_regex=r"https://.*\.trycloudflare\.com",
     allow_credentials=True,
     allow_methods=["*"],
@@ -92,3 +98,9 @@ app.mount("/uploads", StaticFiles(directory=_uploads_dir), name="uploads")
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/auth/google/callback")
+async def google_callback_root(code: str = Query(...), db: AsyncSession = Depends(get_db)):
+    jwt, frontend_url = await _handle_google_callback(code, db)
+    return RedirectResponse(url=f"{frontend_url}/?google_token={jwt}")

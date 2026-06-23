@@ -36,6 +36,12 @@ class Settings(BaseSettings):
     fb_app_id: str = ""
     fb_app_secret: str = ""
 
+    # Google OAuth
+    google_client_id: str = ""
+    google_client_secret: str = ""
+    google_redirect_uri: str = ""
+    frontend_url: str = "http://localhost:5173"
+
     @property
     def is_dev(self) -> bool:
         return self.environment == "development"
