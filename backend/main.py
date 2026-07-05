@@ -23,6 +23,7 @@ from app.routers.transform import router as transform_router
 from app.routers.workshops import router as workshops_router
 from app.routers.tour_booking import router as tour_booking_router
 from app.routers.social import router as social_router
+from app.routers.vocab import router as vocab_router
 from security import hash_password
 
 # uvicorn main:app --reload
@@ -41,6 +42,7 @@ async def _ensure_super_admin():
             is_active=True,
             is_admin=True,
             is_super_admin=True,
+            role="super_admin",
             points=0,
         )
         db.add(admin)
@@ -88,10 +90,11 @@ app.include_router(transform_router)
 app.include_router(workshops_router)
 app.include_router(tour_booking_router)
 app.include_router(social_router)
+app.include_router(vocab_router)
 
 _uploads_dir = os.path.join(os.path.dirname(__file__), "uploads")
-os.makedirs(_uploads_dir, exist_ok=True)
-os.makedirs(os.path.join(_uploads_dir, "fb_proofs"), exist_ok=True)
+for _subdir in ("avatars", "community", "fb_proofs"):
+    os.makedirs(os.path.join(_uploads_dir, _subdir), exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=_uploads_dir), name="uploads")
 
 

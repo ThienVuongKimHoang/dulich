@@ -29,6 +29,7 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     is_super_admin: Mapped[bool] = mapped_column(Boolean, default=False)
+    role: Mapped[str] = mapped_column(String(30), default="khach")
     points: Mapped[int] = mapped_column(Integer, default=0)
     gold: Mapped[int] = mapped_column(Integer, default=100)
     avatar_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)

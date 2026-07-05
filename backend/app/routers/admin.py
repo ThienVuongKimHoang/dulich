@@ -23,8 +23,10 @@ class UserCreateAdmin(BaseModel):
     name: str = Field(..., min_length=2, max_length=120)
     email: EmailStr
     password: str = Field(..., min_length=6)
-    is_admin: bool = False
-    is_super_admin: bool = False
+    role: str = "khach"
+
+
+VALID_ROLES = {"khach", "thanh_vien", "admin", "super_admin"}
 
 
 class UserUpdateAdmin(BaseModel):
@@ -32,6 +34,7 @@ class UserUpdateAdmin(BaseModel):
     is_admin: Optional[bool] = None
     is_super_admin: Optional[bool] = None
     points: Optional[int] = None
+    role: Optional[str] = None
 
 
 class ActivityLogOut(BaseModel):
@@ -83,12 +86,14 @@ async def create_user_admin(
     if existing.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Email đã được sử dụng")
 
+    role = data.role if data.role in VALID_ROLES else "khach"
     user = User(
         name=data.name,
         email=data.email,
         hashed_password=hash_password(data.password),
-        is_admin=data.is_admin,
-        is_super_admin=data.is_super_admin,
+        role=role,
+        is_admin=role in ("admin", "super_admin"),
+        is_super_admin=role == "super_admin",
     )
     db.add(user)
     await db.flush()
@@ -121,10 +126,19 @@ async def update_user_admin(
     if data.is_active is not None:
         user.is_active = data.is_active
         changes.append(f"is_active={data.is_active}")
-    if data.is_admin is not None:
+    if data.role is not None:
+        if data.role not in VALID_ROLES:
+            raise HTTPException(status_code=400, detail=f"Vai trò không hợp lệ. Chọn: {', '.join(VALID_ROLES)}")
+        if user.is_super_admin and data.role != "super_admin":
+            raise HTTPException(status_code=403, detail="Không thể hạ cấp Super Admin")
+        user.role = data.role
+        user.is_admin = data.role in ("admin", "super_admin")
+        user.is_super_admin = data.role == "super_admin"
+        changes.append(f"role={data.role}")
+    elif data.is_admin is not None:
         user.is_admin = data.is_admin
         changes.append(f"is_admin={data.is_admin}")
-    if data.is_super_admin is not None:
+    if data.is_super_admin is not None and data.role is None:
         user.is_super_admin = data.is_super_admin
         changes.append(f"is_super_admin={data.is_super_admin}")
     if data.points is not None:

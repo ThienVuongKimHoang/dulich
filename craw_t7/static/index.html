@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DQN Crawler Eval</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d1117;
+      --surface:  #161b22;
+      --border:   #30363d;
+      --text:     #e6edf3;
+      --muted:    #8b949e;
+      --accent:   #58a6ff;
+      --green:    #3fb950;
+      --red:      #f85149;
+      --yellow:   #d29922;
+      --purple:   #bc8cff;
+      --radius:   10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #1a1f2e 0%, #0d1117 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--accent), var(--purple));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .header-title { font-size: 18px; font-weight: 700; }
+    .header-sub   { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* ─── MAIN ──────────────────────────────────────── */
+    main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    /* ─── SEARCH CARD ────────────────────────────────── */
+    .search-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .search-card h2 { font-size: 15px; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+
+    .input-row {
+      display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap;
+    }
+    .input-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 260px; }
+    .input-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .input-group input, .input-group select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 9px 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .input-group input:focus, .input-group select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(88,166,255,.1);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #0d1117;
+      border: none;
+      border-radius: 6px;
+      padding: 9px 22px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      white-space: nowrap;
+      height: 38px;
+    }
+    .btn-primary:hover  { opacity: .85; }
+    .btn-primary:active { transform: scale(.97); }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ─── STATS ──────────────────────────────────────── */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px; margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+    .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
+    .stat-value { font-size: 26px; font-weight: 700; margin-top: 4px; }
+    .stat-value.green  { color: var(--green);  }
+    .stat-value.red    { color: var(--red);    }
+    .stat-value.accent { color: var(--accent); }
+
+    /* ─── ALERT ──────────────────────────────────────── */
+    .alert {
+      background: rgba(248,81,73,.08);
+      border: 1px solid rgba(248,81,73,.4);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--red);
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .alert.show { display: block; }
+
+    /* ─── TABLE ──────────────────────────────────────── */
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .table-header h3 { font-size: 14px; font-weight: 600; }
+    .table-search input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 13px;
+      outline: none;
+      width: 220px;
+    }
+    .table-search input:focus { border-color: var(--accent); }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: rgba(255,255,255,.03);
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    thead th:hover { color: var(--text); }
+    thead th .sort-icon { margin-left: 4px; opacity: .4; }
+    thead th.sorted .sort-icon { opacity: 1; color: var(--accent); }
+
+    tbody tr { border-bottom: 1px solid rgba(48,54,61,.6); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,.025); }
+    tbody tr.seed-row { background: rgba(88,166,255,.05); }
+
+    td { padding: 10px 14px; vertical-align: middle; }
+
+    .url-cell { max-width: 340px; }
+    .url-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 13px;
+      word-break: break-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .url-link:hover { text-decoration: underline; }
+    .seed-badge {
+      display: inline-block;
+      background: rgba(88,166,255,.2);
+      color: var(--accent);
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      margin-bottom: 3px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+
+    /* Q-value bar */
+    .q-cell { min-width: 130px; }
+    .q-bar-wrap { display: flex; align-items: center; gap: 8px; }
+    .q-bar-bg {
+      flex: 1; height: 6px; border-radius: 3px;
+      background: rgba(255,255,255,.07); overflow: hidden;
+    }
+    .q-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width .4s ease;
+    }
+    .q-val { font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 48px; text-align: right; }
+
+    /* Action badge */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .badge-crawl { background: rgba(63,185,80,.15); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+    .badge-skip  { background: rgba(248,81,73,.12);  color: var(--red);  border: 1px solid rgba(248,81,73,.3); }
+
+    /* URL score pill */
+    .score-pill {
+      display: inline-block;
+      min-width: 38px;
+      text-align: center;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .score-high { background: rgba(63,185,80,.15);  color: var(--green); }
+    .score-mid  { background: rgba(210,153,34,.12);  color: var(--yellow);}
+    .score-low  { background: rgba(248,81,73,.12);   color: var(--red);  }
+    .score-neg  { background: rgba(139,148,158,.1);  color: var(--muted); }
+
+    /* Features toggle */
+    .feat-btn {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      border-radius: 5px; padding: 3px 8px; font-size: 11px; cursor: pointer;
+      transition: all .15s;
+    }
+    .feat-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .feat-row td {
+      padding: 0;
+      background: rgba(0,0,0,.25);
+    }
+    .feat-inner {
+      padding: 12px 14px;
+      display: none;
+    }
+    .feat-inner.open { display: block; }
+    .feat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 8px;
+    }
+    .feat-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+    .feat-name { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .feat-mini-bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,.07); margin: 4px 0; overflow: hidden; }
+    .feat-mini-fill { height: 100%; border-radius: 2px; background: var(--accent); }
+    .feat-value { font-size: 13px; font-weight: 600; }
+
+    /* ─── LOADING ─────────────────────────────────────── */
+    .loading {
+      display: none; text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .loading.show { display: block; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── EMPTY STATE ─────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+    .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: .6; }
+    .empty-text { font-size: 15px; }
+
+    /* ─── SCROLLBAR ───────────────────────────────────── */
+    ::-webkit-scrollbar        { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track  { background: var(--bg); }
+    ::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">🕷</div>
+    <div>
+      <div class="header-title">DQN Crawler Eval</div>
+      <div class="header-sub">Đánh giá URL bằng Double DQN Agent</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- SEARCH -->
+    <div class="search-card">
+      <h2>Nhập Seed URL để phân tích</h2>
+      <div class="input-row">
+        <div class="input-group" style="flex:2">
+          <label>Seed URL</label>
+          <input id="url-input" type="url" placeholder="https://vnexpress.net/du-lich" />
+        </div>
+        <div class="input-group" style="flex:0 0 140px">
+          <label>Max links</label>
+          <select id="max-links">
+            <option value="30">30 links</option>
+            <option value="60" selected>60 links</option>
+            <option value="100">100 links</option>
+          </select>
+        </div>
+        <button class="btn-primary" id="eval-btn" onclick="runEval()">Phân tích ▸</button>
+      </div>
+    </div>
+
+    <!-- ERROR -->
+    <div class="alert" id="alert-box"></div>
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Đang fetch URL và chạy DQN agent…
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row" id="stats-row" style="display:none">
+      <div class="stat-card">
+        <div class="stat-label">Tổng links</div>
+        <div class="stat-value accent" id="stat-total">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CRAWL</div>
+        <div class="stat-value green" id="stat-crawl">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">SKIP</div>
+        <div class="stat-value red" id="stat-skip">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Avg Q-value</div>
+        <div class="stat-value" id="stat-avgq" style="color:var(--purple)">—</div>
+      </div>
+    </div>
+
+    <!-- EMPTY -->
+    <div class="empty-state" id="empty-state">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">Nhập seed URL và nhấn Phân tích để bắt đầu</div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrap" id="table-wrap" style="display:none">
+      <div class="table-header">
+        <h3 id="table-title">Kết quả</h3>
+        <div class="table-search">
+          <input id="search-input" type="text" placeholder="Lọc URL…" oninput="filterTable()" />
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="result-table">
+          <thead>
+            <tr>
+              <th onclick="sortBy('url')"># &nbsp;URL <span class="sort-icon">↕</span></th>
+              <th onclick="sortBy('q_value')" class="sorted">Q-Value <span class="sort-icon">↓</span></th>
+              <th onclick="sortBy('action')">Action <span class="sort-icon">↕</span></th>
+              <th onclick="sortBy('url_score')">URL Score <span class="sort-icon">↕</span></th>
+              <th>Features</th>
+            </tr>
+          </thead>
+          <tbody id="result-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let allResults = [];
+    let sortKey = 'q_value';
+    let sortAsc  = false;
+    let rowIndex = 0;
+
+    async function runEval() {
+      const url = document.getElementById('url-input').value.trim();
+      const maxLinks = parseInt(document.getElementById('max-links').value);
+
+      if (!url) { showAlert('Vui lòng nhập URL'); return; }
+      if (!url.startsWith('http')) { showAlert('URL phải bắt đầu bằng http/https'); return; }
+
+      hideAlert();
+      showLoading(true);
+      hideTable();
+      document.getElementById('stats-row').style.display = 'none';
+      document.getElementById('empty-state').style.display = 'none';
+      document.getElementById('eval-btn').disabled = true;
+
+      try {
+        const res = await fetch('/api/eval', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url, max_links: maxLinks }),
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+
+        if (data.fetch_error) {
+          showAlert(`⚠️ Không fetch được trang: ${data.fetch_error} — chỉ eval seed URL`);
+        }
+
+        allResults = data.results;
+        renderStats(data);
+        renderTable();
+        document.getElementById('table-wrap').style.display = 'block';
+        document.getElementById('stats-row').style.display = 'grid';
+        document.getElementById('table-title').textContent =
+          `Kết quả — ${data.total} links từ ${data.seed_url}`;
+      } catch (e) {
+        showAlert('Lỗi: ' + e.message);
+        document.getElementById('empty-state').style.display = 'block';
+      } finally {
+        showLoading(false);
+        document.getElementById('eval-btn').disabled = false;
+      }
+    }
+
+    function renderStats(data) {
+      document.getElementById('stat-total').textContent = data.total;
+      document.getElementById('stat-crawl').textContent = data.crawl_count;
+      document.getElementById('stat-skip').textContent  = data.skip_count;
+      if (data.results.length) {
+        const avg = data.results.reduce((s, r) => s + r.q_value, 0) / data.results.length;
+        document.getElementById('stat-avgq').textContent = avg.toFixed(3);
+      }
+    }
+
+    function renderTable() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      let rows = allResults.filter(r => r.url.toLowerCase().includes(query));
+
+      rows.sort((a, b) => {
+        let av = a[sortKey], bv = b[sortKey];
+        if (typeof av === 'string') av = av.toLowerCase(), bv = bv.toLowerCase();
+        if (av < bv) return sortAsc ? -1 : 1;
+        if (av > bv) return sortAsc ? 1  : -1;
+        return 0;
+      });
+
+      rowIndex = 0;
+      const tbody = document.getElementById('result-body');
+      tbody.innerHTML = '';
+
+      rows.forEach((r, i) => {
+        const idx = rowIndex++;
+
+        // Q-bar color
+        const q = r.q_value;
+        const pct = Math.min(Math.max((q + 0.2) / 1.2, 0), 1) * 100;
+        const barColor = q > 0.3 ? '#3fb950' : q > 0 ? '#d29922' : '#f85149';
+
+        // Score pill
+        const sc = r.url_score;
+        const scoreClass = sc >= 15 ? 'score-high' : sc >= 5 ? 'score-mid' : sc >= 0 ? 'score-low' : 'score-neg';
+
+        // Main row
+        const tr = document.createElement('tr');
+        if (r.is_seed) tr.className = 'seed-row';
+        tr.innerHTML = `
+          <td class="url-cell">
+            ${r.is_seed ? '<div class="seed-badge">Seed</div>' : ''}
+            <a class="url-link" href="${escHtml(r.url)}" target="_blank" title="${escHtml(r.url)}">${escHtml(r.url)}</a>
+          </td>
+          <td class="q-cell">
+            <div class="q-bar-wrap">
+              <div class="q-bar-bg">
+                <div class="q-bar-fill" style="width:${pct.toFixed(1)}%;background:${barColor}"></div>
+              </div>
+              <span class="q-val" style="color:${barColor}">${q >= 0 ? '+' : ''}${q.toFixed(3)}</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge ${r.action === 'CRAWL' ? 'badge-crawl' : 'badge-skip'}">
+              ${r.action === 'CRAWL' ? '✓' : '✗'} ${r.action}
+            </span>
+          </td>
+          <td><span class="score-pill ${scoreClass}">${sc}</span></td>
+          <td>
+            <button class="feat-btn" onclick="toggleFeat(${idx})">Xem features</button>
+          </td>`;
+
+        // Feature expand row
+        const featTr = document.createElement('tr');
+        featTr.className = 'feat-row';
+        featTr.innerHTML = `<td colspan="5"><div class="feat-inner" id="feat-${idx}">${buildFeatHtml(r.features)}</div></td>`;
+
+        tbody.appendChild(tr);
+        tbody.appendChild(featTr);
+      });
+
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:30px;color:var(--muted)">Không tìm thấy URL nào</td></tr>';
+      }
+    }
+
+    function buildFeatHtml(features) {
+      const labels = {
+        domain_trust:   'Domain Trust',
+        url_length:     'URL Length',
+        path_depth:     'Path Depth',
+        has_year:       'Has Year',
+        has_query:      'Has Query',
+        good_keywords:  'Good Keywords',
+        bad_keywords:   'Bad Keywords',
+        slug_quality:   'Slug Quality',
+        has_tracking:   'Has Tracking',
+        digit_ratio:    'Digit Ratio',
+        is_https:       'HTTPS',
+      };
+      const warn = new Set(['bad_keywords', 'has_tracking', 'has_query', 'digit_ratio', 'path_depth']);
+      let html = '<div class="feat-grid">';
+      for (const [k, v] of Object.entries(features)) {
+        const pct = (v * 100).toFixed(0);
+        const isWarn = warn.has(k) && v > 0.3;
+        const fillColor = isWarn ? 'var(--red)' : 'var(--accent)';
+        html += `
+          <div class="feat-item">
+            <div class="feat-name">${labels[k] || k}</div>
+            <div class="feat-mini-bar"><div class="feat-mini-fill" style="width:${pct}%;background:${fillColor}"></div></div>
+            <div class="feat-value" style="color:${isWarn ? 'var(--red)' : 'var(--text)'}">${v.toFixed(3)}</div>
+          </div>`;
+      }
+      return html + '</div>';
+    }
+
+    function toggleFeat(idx) {
+      const el = document.getElementById(`feat-${idx}`);
+      const btn = el.closest('tr').previousElementSibling.querySelector('.feat-btn');
+      if (el.classList.toggle('open')) {
+        btn.textContent = 'Ẩn features';
+      } else {
+        btn.textContent = 'Xem features';
+      }
+    }
+
+    function sortBy(key) {
+      if (sortKey === key) { sortAsc = !sortAsc; }
+      else { sortKey = key; sortAsc = key === 'url'; }
+
+      document.querySelectorAll('thead th').forEach(th => th.classList.remove('sorted'));
+      const idx = ['url', 'q_value', 'action', 'url_score'].indexOf(key);
+      if (idx >= 0) {
+        const th = document.querySelectorAll('thead th')[idx];
+        th.classList.add('sorted');
+        th.querySelector('.sort-icon').textContent = sortAsc ? '↑' : '↓';
+      }
+      renderTable();
+    }
+
+    function filterTable() { renderTable(); }
+
+    function showAlert(msg) {
+      const el = document.getElementById('alert-box');
+      el.textContent = msg;
+      el.classList.add('show');
+    }
+    function hideAlert() { document.getElementById('alert-box').classList.remove('show'); }
+    function showLoading(v) {
+      document.getElementById('loading').classList.toggle('show', v);
+    }
+    function hideTable() {
+      document.getElementById('table-wrap').style.display = 'none';
+    }
+    function escHtml(s) {
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // Enter key submit
+    document.getElementById('url-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') runEval();
+    });
+  </script>
+</body>
+</html>

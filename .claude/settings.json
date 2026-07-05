@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//private/tmp/**)",
+      "Bash(npm init *)",
+      "Bash(node /tmp/shot.mjs)",
+      "Read(//tmp/**)",
+      "WebFetch(domain:www.openstreetmap.org)",
+      "WebFetch(domain:nominatim.openstreetmap.org)",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('seed_workshops.py'\\).read\\(\\)\\); print\\('OK'\\)\")"
+    ]
+  }
+}

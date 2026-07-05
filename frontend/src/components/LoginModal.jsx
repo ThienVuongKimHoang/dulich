@@ -195,6 +195,14 @@ export default function LoginModal({ onClose, onSuccess }) {
             </p>
           )}
 
+          {tab === "register" && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "1rem", padding: "0.55rem 0.75rem", background: "#FFF8EC", borderRadius: 10, border: "1px solid rgba(230,81,0,0.15)" }}>
+              <span style={{ fontSize: "1rem" }}>👤</span>
+              <p style={{ margin: 0, fontSize: "0.73rem", color: "#7A4500", lineHeight: 1.4 }}>
+                Tài khoản mới sẽ có vai trò <strong>Khách</strong>. Quản trị viên có thể nâng cấp quyền sau.
+              </p>
+            </div>
+          )}
           <button type="submit" className="btn-primary" style={{ width: "100%", justifyContent: "center", opacity: loading ? 0.7 : 1, pointerEvents: loading ? "none" : "auto" }}>
             {loading ? (
               <>

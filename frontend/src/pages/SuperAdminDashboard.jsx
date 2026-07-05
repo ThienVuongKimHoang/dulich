@@ -187,11 +187,35 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
   const [wsLoading, setWsLoading] = useState(false);
   const [wsSearch, setWsSearch] = useState("");
   const [showAddUser, setShowAddUser] = useState(false);
-  const [addForm, setAddForm] = useState({ name: "", email: "", password: "", is_admin: false, is_super_admin: false });
+  const [addForm, setAddForm] = useState({ name: "", email: "", password: "", role: "khach" });
   const [addLoading, setAddLoading] = useState(false);
   const [addError, setAddError] = useState("");
   const [actionLoading, setActionLoading] = useState(null);
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const DEFAULT_BG = "#F4F6F9";
+  const [bgColor, setBgColor] = useState(() => localStorage.getItem("sa_bg_color") || DEFAULT_BG);
+  const [showBgPicker, setShowBgPicker] = useState(false);
+
+  const changeBgColor = (color) => {
+    setBgColor(color);
+    localStorage.setItem("sa_bg_color", color);
+  };
+
+  const DEFAULT_BANNER = C.moss;
+  const [bannerColor, setBannerColor] = useState(() => localStorage.getItem("sa_banner_color") || DEFAULT_BANNER);
+  const [showBannerPicker, setShowBannerPicker] = useState(false);
+
+  const changeBannerColor = (color) => {
+    setBannerColor(color);
+    localStorage.setItem("sa_banner_color", color);
+  };
+
+  // Darken a hex color for the gradient's end stop
+  const darken = (hex, amt = 0.35) => {
+    const n = parseInt(hex.slice(1), 16);
+    const f = (v) => Math.max(0, Math.round(v * (1 - amt)));
+    return `rgb(${f(n >> 16)}, ${f((n >> 8) & 255)}, ${f(n & 255)})`;
+  };
 
   const token = localStorage.getItem("access_token");
   const authH = { Authorization: `Bearer ${token}`, "Content-Type": "application/json" };
@@ -267,9 +291,9 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
     finally { setAddLoading(false); }
   };
 
-  const handleToggleAdmin = async (u) => {
-    setActionLoading(u.id + "_admin");
-    await fetch(`${API_BASE}/api/v1/admin/users/${u.id}`, { method: "PATCH", headers: authH, body: JSON.stringify({ is_admin: !u.is_admin }) });
+  const handleChangeRole = async (u, newRole) => {
+    setActionLoading(u.id + "_role");
+    await fetch(`${API_BASE}/api/v1/admin/users/${u.id}`, { method: "PATCH", headers: authH, body: JSON.stringify({ role: newRole }) });
     setActionLoading(null); load();
   };
 
@@ -317,7 +341,7 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
   const statusLabel = { confirmed: "Đã xác nhận", pending: "Chờ xử lý", cancelled: "Đã huỷ", completed: "Hoàn thành" };
 
   const S = {
-    page: { minHeight: "100vh", background: "#F4F6F9", fontFamily: "'Be Vietnam Pro', sans-serif" },
+    page: { minHeight: "100vh", background: bgColor, fontFamily: "'Be Vietnam Pro', sans-serif" },
     nav: { background: "white", borderBottom: "1px solid rgba(0,0,0,0.07)", padding: "0 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", height: 60, position: "sticky", top: 0, zIndex: 100 },
     body: { maxWidth: 1200, margin: "0 auto", padding: "2rem 1.5rem" },
     tabs: { display: "flex", gap: 6, marginBottom: "1.5rem", background: "white", borderRadius: 14, padding: "0.4rem", boxShadow: "0 1px 4px rgba(0,0,0,0.06)", overflowX: "auto" },
@@ -326,7 +350,7 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
     th: { textAlign: "left", padding: "0.7rem 1rem", fontSize: "0.72rem", fontWeight: 700, color: "#888", textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "2px solid rgba(0,0,0,0.05)" },
     td: { padding: "0.8rem 1rem", fontSize: "0.82rem", color: C.dark, borderBottom: "1px solid rgba(0,0,0,0.04)" },
     btnSm: (color, bg) => ({ padding: "0.3rem 0.7rem", borderRadius: 8, border: "none", cursor: "pointer", fontSize: "0.72rem", fontWeight: 600, color, background: bg, fontFamily: "'Be Vietnam Pro',sans-serif" }),
-    roleTag: (r) => ({ display: "inline-block", padding: "2px 8px", borderRadius: "2rem", fontSize: "0.65rem", fontWeight: 700, background: r === "super_admin" ? "#E8F5E9" : r === "admin" ? "#EDE7F6" : "#F0F0F0", color: r === "super_admin" ? C.moss : r === "admin" ? "#7E57C2" : "#888" }),
+    roleTag: (r) => ({ display: "inline-flex", alignItems: "center", gap: 4, padding: "2px 9px", borderRadius: "2rem", fontSize: "0.65rem", fontWeight: 700, background: r === "super_admin" ? "#E8F5E9" : r === "admin" ? "#EDE7F6" : r === "thanh_vien" ? "#E3F2FD" : "#FFF3E0", color: r === "super_admin" ? C.moss : r === "admin" ? "#7E57C2" : r === "thanh_vien" ? "#1565C0" : "#E65100" }),
   };
 
   const TABS = [
@@ -349,7 +373,7 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {/* Greeting banner */}
-        <div style={{ background: `linear-gradient(135deg, ${C.moss} 0%, #2D4A2E 100%)`, borderRadius: 20, padding: "1.75rem 2rem", color: "white", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ background: `linear-gradient(135deg, ${bannerColor} 0%, ${darken(bannerColor)} 100%)`, borderRadius: 20, padding: "1.75rem 2rem", color: "white", display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
           <div>
             <p style={{ fontSize: "0.8rem", opacity: 0.75, margin: "0 0 4px", letterSpacing: "0.05em" }}>👋 {greet},</p>
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", margin: "0 0 6px", fontWeight: 700 }}>
@@ -360,6 +384,35 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
             </p>
           </div>
           <div style={{ fontSize: "4rem", opacity: 0.15 }}>🌿</div>
+
+          {/* Banner color picker */}
+          <button onClick={() => setShowBannerPicker(v => !v)} title="Đổi màu nền banner"
+            style={{ position: "absolute", top: 12, right: 14, width: 30, height: 30, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,0.4)", background: "rgba(255,255,255,0.15)", cursor: "pointer", fontSize: "0.85rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            🎨
+          </button>
+          {showBannerPicker && (
+            <>
+              <div onClick={() => setShowBannerPicker(false)} style={{ position: "fixed", inset: 0, zIndex: 150 }} />
+              <div style={{ position: "absolute", top: 48, right: 14, zIndex: 160, background: "white", borderRadius: 14, padding: "1rem", width: 230, boxShadow: "0 12px 40px rgba(0,0,0,0.18)", color: C.dark }}>
+                <p style={{ fontSize: "0.75rem", fontWeight: 700, color: C.dark, margin: "0 0 10px" }}>🎨 Màu nền banner</p>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 7, marginBottom: 12 }}>
+                  {[DEFAULT_BANNER, "#1565C0", "#6A1B9A", "#C62828", "#E65100", "#00695C", "#37474F", "#AD1457", "#4527A0", "#2E7D32", "#B8860B", "#212121"].map(c => (
+                    <button key={c} onClick={() => changeBannerColor(c)} title={c}
+                      style={{ width: 28, height: 28, borderRadius: 8, cursor: "pointer", background: `linear-gradient(135deg, ${c} 0%, ${darken(c)} 100%)`, border: bannerColor.toUpperCase() === c.toUpperCase() ? `2.5px solid ${C.gold}` : "1.5px solid rgba(0,0,0,0.12)" }} />
+                  ))}
+                </div>
+                <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.75rem", color: "#555", fontWeight: 600, cursor: "pointer", marginBottom: 10 }}>
+                  <input type="color" value={bannerColor} onChange={e => changeBannerColor(e.target.value)}
+                    style={{ width: 34, height: 26, border: "none", padding: 0, background: "none", cursor: "pointer" }} />
+                  Màu tùy chỉnh
+                </label>
+                <button onClick={() => changeBannerColor(DEFAULT_BANNER)}
+                  style={{ width: "100%", padding: "0.45rem", borderRadius: 8, border: "1px solid rgba(0,0,0,0.12)", background: "transparent", color: "#888", cursor: "pointer", fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "0.72rem", fontWeight: 600 }}>
+                  ↺ Khôi phục mặc định
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Stat cards */}
@@ -844,6 +897,35 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
           <span style={{ fontSize: "0.6rem", fontWeight: 700, background: C.moss, color: "white", padding: "2px 8px", borderRadius: "2rem", letterSpacing: "0.08em" }}>SUPER ADMIN</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <div style={{ position: "relative" }}>
+            <button onClick={() => setShowBgPicker(v => !v)} title="Chỉnh màu nền"
+              style={{ width: 34, height: 34, borderRadius: "50%", border: "1.5px solid rgba(0,0,0,0.12)", background: bgColor, cursor: "pointer", fontSize: "0.95rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              🎨
+            </button>
+            {showBgPicker && (
+              <>
+                <div onClick={() => setShowBgPicker(false)} style={{ position: "fixed", inset: 0, zIndex: 150 }} />
+                <div style={{ position: "absolute", top: 42, right: 0, zIndex: 160, background: "white", borderRadius: 14, padding: "1rem", width: 230, boxShadow: "0 12px 40px rgba(0,0,0,0.15)" }}>
+                  <p style={{ fontSize: "0.75rem", fontWeight: 700, color: C.dark, margin: "0 0 10px" }}>🎨 Màu nền dashboard</p>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 7, marginBottom: 12 }}>
+                    {[DEFAULT_BG, "#FFFFFF", "#FDF6EC", "#EEF3EE", "#E8F0FE", "#FCEEF0", "#F3EEFB", "#FFF8E1", "#E0F2F1", "#ECEFF1", "#2B2B33", "#1E2A22"].map(c => (
+                      <button key={c} onClick={() => changeBgColor(c)} title={c}
+                        style={{ width: 28, height: 28, borderRadius: 8, cursor: "pointer", background: c, border: bgColor.toUpperCase() === c.toUpperCase() ? `2.5px solid ${C.moss}` : "1.5px solid rgba(0,0,0,0.12)" }} />
+                    ))}
+                  </div>
+                  <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.75rem", color: "#555", fontWeight: 600, cursor: "pointer", marginBottom: 10 }}>
+                    <input type="color" value={bgColor} onChange={e => changeBgColor(e.target.value)}
+                      style={{ width: 34, height: 26, border: "none", padding: 0, background: "none", cursor: "pointer" }} />
+                    Màu tùy chỉnh
+                  </label>
+                  <button onClick={() => changeBgColor(DEFAULT_BG)}
+                    style={{ width: "100%", padding: "0.45rem", borderRadius: 8, border: "1px solid rgba(0,0,0,0.12)", background: "transparent", color: "#888", cursor: "pointer", fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "0.72rem", fontWeight: 600 }}>
+                    ↺ Khôi phục mặc định
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
           <span style={{ fontSize: "0.82rem", color: "#888" }}>{currentUser?.email}</span>
           <button onClick={onLogout} style={{ padding: "0.4rem 1rem", borderRadius: 20, border: `1.5px solid ${C.rust}`, background: "transparent", color: C.rust, cursor: "pointer", fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "0.78rem", fontWeight: 600 }}>
             Đăng xuất
@@ -894,8 +976,8 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
                         <td style={S.td}>{u.name}</td>
                         <td style={S.td}><span style={{ fontSize: "0.78rem" }}>{u.email}</span></td>
                         <td style={S.td}>
-                          <span style={S.roleTag(u.is_super_admin ? "super_admin" : u.is_admin ? "admin" : "user")}>
-                            {u.is_super_admin ? "Super Admin" : u.is_admin ? "Admin" : "User"}
+                          <span style={S.roleTag(u.role || (u.is_super_admin ? "super_admin" : u.is_admin ? "admin" : "khach"))}>
+                            {u.role === "super_admin" ? "🛡️ Super Admin" : u.role === "admin" ? "⚙️ Admin" : u.role === "thanh_vien" ? "✅ Thành viên" : "👤 Khách"}
                           </span>
                         </td>
                         <td style={S.td}>
@@ -906,10 +988,17 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
                         <td style={S.td}>{u.points.toLocaleString("vi-VN")}</td>
                         <td style={S.td}>
                           {!u.is_super_admin && (
-                            <div style={{ display: "flex", gap: 6 }}>
-                              <button disabled={actionLoading === u.id + "_admin"} onClick={() => handleToggleAdmin(u)} style={S.btnSm(u.is_admin ? "#7E57C2" : "#888", u.is_admin ? "#EDE7F6" : "#F5F5F5")}>
-                                {u.is_admin ? "Hạ Admin" : "Nâng Admin"}
-                              </button>
+                            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                              <select
+                                value={u.role || "khach"}
+                                disabled={actionLoading === u.id + "_role"}
+                                onChange={e => handleChangeRole(u, e.target.value)}
+                                style={{ padding: "0.3rem 0.5rem", borderRadius: 8, border: "1.5px solid rgba(0,0,0,0.12)", fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer", background: "white", color: C.dark }}
+                              >
+                                <option value="khach">👤 Khách</option>
+                                <option value="thanh_vien">✅ Thành viên</option>
+                                <option value="admin">⚙️ Admin</option>
+                              </select>
                               <button disabled={actionLoading === u.id + "_active"} onClick={() => handleToggleActive(u)} style={S.btnSm(u.is_active ? "#FF7043" : "#4CAF50", u.is_active ? "#FFF3F0" : "#F0FFF4")}>
                                 {u.is_active ? "Khóa" : "Mở"}
                               </button>
@@ -935,13 +1024,18 @@ export default function SuperAdminDashboard({ currentUser, onLogout }) {
                         <input className="admin-input" type={type} value={addForm[key]} required onChange={e => setAddForm(f => ({ ...f, [key]: e.target.value }))} />
                       </div>
                     ))}
-                    <div style={{ display: "flex", gap: "1.5rem" }}>
-                      {[["is_admin", "Quyền Admin"], ["is_super_admin", "Super Admin"]].map(([k, lbl]) => (
-                        <label key={k} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.82rem", cursor: "pointer" }}>
-                          <input type="checkbox" checked={addForm[k]} onChange={e => setAddForm(f => ({ ...f, [k]: e.target.checked }))} style={{ accentColor: C.moss }} />
-                          {lbl}
-                        </label>
-                      ))}
+                    <div>
+                      <label style={{ fontSize: "0.78rem", fontWeight: 600, color: "#555", display: "block", marginBottom: 5 }}>Vai trò</label>
+                      <select
+                        className="admin-input"
+                        value={addForm.role}
+                        onChange={e => setAddForm(f => ({ ...f, role: e.target.value }))}
+                      >
+                        <option value="khach">👤 Khách (mặc định)</option>
+                        <option value="thanh_vien">✅ Thành viên</option>
+                        <option value="admin">⚙️ Admin</option>
+                        <option value="super_admin">🛡️ Super Admin</option>
+                      </select>
                     </div>
                     {addError && <div style={{ fontSize: "0.78rem", color: "#F44336", background: "#FFF0F0", padding: "0.5rem 0.75rem", borderRadius: 8 }}>{addError}</div>}
                     <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>

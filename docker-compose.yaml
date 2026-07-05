@@ -46,20 +46,32 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ../hoc_tap
       dockerfile: Dockerfile
     container_name: binhloi_frontend
     restart: unless-stopped
     depends_on:
       - backend
 
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: binhloi_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
   tunnel:
     image: cloudflare/cloudflared:latest
     container_name: binhloi_tunnel
     restart: unless-stopped
-    command: tunnel --no-autoupdate --url http://frontend:80
+    command: tunnel --no-autoupdate --url http://nginx:80
     depends_on:
-      - frontend
+      - nginx
 
 volumes:
   postgres_data:

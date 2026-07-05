@@ -18,6 +18,7 @@ class UserOut(BaseModel):
     is_active: bool
     is_admin: bool
     is_super_admin: bool
+    role: str = "khach"
     points: int
     gold: int = 0
     avatar_url: Optional[str] = None
