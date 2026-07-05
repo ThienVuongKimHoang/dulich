@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
-# Start Cloudflare quick tunnel for backend and update frontend .env
+# Start Cloudflare quick tunnel for the local stack (nginx on port 80)
 
 set -e
 
-BACKEND_PORT=8000
-FRONTEND_ENV="/Users/vuongkimhoangthien/dulich/frontend/.env"
+PORT=80
 LOG_FILE="/tmp/cloudflared-tunnel.log"
 
-echo "🚇  Starting Cloudflare tunnel on port $BACKEND_PORT..."
+echo "🚇  Starting Cloudflare tunnel on port $PORT..."
 
 # Kill any existing cloudflared process
 pkill -f "cloudflared tunnel" 2>/dev/null || true
 sleep 1
 
 # Start tunnel in background, capture output
-cloudflared tunnel --url "http://localhost:$BACKEND_PORT" > "$LOG_FILE" 2>&1 &
+cloudflared tunnel --url "http://localhost:$PORT" > "$LOG_FILE" 2>&1 &
 TUNNEL_PID=$!
 
 echo "  PID: $TUNNEL_PID — waiting for URL..."
@@ -33,16 +32,10 @@ if [ -z "$TUNNEL_URL" ]; then
 fi
 
 echo "✅  Tunnel URL: $TUNNEL_URL"
-
-# Update frontend .env
-echo "VITE_API_URL=$TUNNEL_URL" > "$FRONTEND_ENV"
-echo "  Updated $FRONTEND_ENV"
-
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  Backend tunnel : $TUNNEL_URL"
-echo "  Frontend env   : $FRONTEND_ENV"
-echo "  Tunnel PID     : $TUNNEL_PID"
+echo "  Tunnel URL : $TUNNEL_URL"
+echo "  Tunnel PID : $TUNNEL_PID"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 echo "To stop: kill $TUNNEL_PID"

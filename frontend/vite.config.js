@@ -5,6 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: true,
+    allowedHosts: "all",
+    proxy: {
+      // npm run dev: forward API calls to the dulich backend
+      "/api": "http://localhost:8000",
+    },
   },
 })
