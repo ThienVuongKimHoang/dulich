@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: dockerfile
-    container_name: hoctap_backend
+    container_name: dulich_backend
     restart: unless-stopped
     env_file: ./backend/.env
 
@@ -11,7 +11,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: hoctap_frontend
+    container_name: dulich_frontend
     restart: unless-stopped
     depends_on:
       - backend
@@ -20,18 +20,10 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile
-    container_name: hoctap_nginx
+    container_name: dulich_nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - frontend
       - backend
-
-  tunnel:
-    image: cloudflare/cloudflared:latest
-    container_name: hoctap_tunnel
-    restart: unless-stopped
-    command: tunnel --no-autoupdate --url http://nginx:80
-    depends_on:
-      - nginx
